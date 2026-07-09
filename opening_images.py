@@ -1,3 +1,4 @@
+# Made by @sudo_null. Ts aint for mah project tbh
 import os
 import mysql.connector
 
