@@ -6,14 +6,14 @@ def get_connected():
         host='localhost',
         user='root',
         passwd='root',
-        database='Grade_12_Project'
+        database='grade_12_project'
     )
 
 conn = get_connected()
 cursor = conn.cursor()
 
-stock_symbol = input('Enter the stock symbol: ').upper()
-cursor.execute("""SELECT close FROM Grade_12_Project WHERE symbol = %s""", (stock_symbol,))
+# Removed the symbol input since our table stores the stock data directly
+cursor.execute("""SELECT Close FROM stocks""")
 
 close_values = [row[0] for row in cursor.fetchall()]
 
@@ -52,6 +52,6 @@ next_index = len(x) + 1
 predicted_close = m * next_index + b
 print(f"Predicted next close price: {predicted_close}")
 
-if __name__ == '__main__':                  # Allows to run this program as a library in a seperate program without any headache
+if __name__ == '__main__':              # Allows to run this program as a library in a seperate program without any headache
     cursor.close()
     conn.close()

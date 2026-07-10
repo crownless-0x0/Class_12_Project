@@ -1,67 +1,66 @@
-#Made by @sudo_null. Totally human made. Feel free to use it for your own database collection
-#This module imports csv files to MySQL DB, shaving off one of the headache 
-#For this particular database for this project the following structure is used [id, symbol, marketdate, open, high, low, close]
-
+# Made by @sudo_null. Totally human made. Feel free to use it for your own database collection
+# This module imports csv files to MySQL DB, shaving off one of the headache
+# Table structure: [id, marketdate, open, high, low, close, volume]
 import mysql.connector
 import csv
 
-def get_connected():                            # This function is used to connect to your database
+def get_connected():
     return mysql.connector.connect(
         host="localhost",
         user='root',
         passwd='root',
-        database='esanth_shivesh_project'       # Replace the database with your own database
+        database='grade_12_project'
     )
 
 conn = get_connected()
 cursor = conn.cursor()
 
-# Creating the database
+# Creating the table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS stocks(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    symbol VARCHAR(10),
-    marketdate date,
-    open float,
-    high float,
-    low float,
-    close float
+    `Date` DATE,
+    Open FLOAT,
+    High FLOAT,
+    Low FLOAT,
+    Close FLOAT,
+    Volume FLOAT
 )
 """)
 
-def input_csv():                                # Initializing the csv input file
+def input_csv():
     location = input('Enter the csv file location: ')
+
+    inserted = 0
+    failed = 0
+
     with open(location, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            cursor.execute(
-                """
-                INSERT INTO stocks(symbol, marketdate, open, high, low, close)
-                VALUES(%s,%s,%s,%s,%s,%s)
-                """,
-                (
-                    row['symbol'],
-                    row['marketdate'],
-                    row['open'],
-                    row['high'],
-                    row['low'],
-                    row['close']
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO stocks(`Date`, Open, High, Low, Close, Volume)
+                    VALUES(%s,%s,%s,%s,%s,%s)
+                    """,
+                    (
+                        row['Date'],
+                        row['Open'],
+                        row['High'],
+                        row['Low'],
+                        row['Close'],
+                        row['Volume']
+                    )
                 )
-            )
-    conn.commit()
-    print('Imported the csv data to the SQL DB')
+                inserted += 1
+            except mysql.connector.Error as e:
+                failed += 1
+                print(f"Skipped a row due to error: {e}")
 
-if __name__ == '__main__':                  # Allows to run this program as a library in a seperate program without any headache
+    conn.commit()
+    print(f'Imported {inserted} rows to the SQL DB ({failed} skipped)')
+
+if __name__ == '__main__':
     input_csv()
     cursor.close()
     conn.close()
-
-
-
-
-
-
-
-
-
-
