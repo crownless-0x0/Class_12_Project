@@ -67,11 +67,11 @@ Configure your MySQL credentials inside the database connection module before ru
 
 
 * \[x] CSV to MySQL Import Module
-* \[ ] Database Query Module
-* \[ ] Statistical Analysis Module
+* \[x] Database Query Module
+* \[x] Statistical Analysis Module
 * \[ ] Monte Carlo Simulation Engine
 * \[ ] Data Visualization
-* \[ ] User Interface
+* \[x] User Interface
 * \[ ] Final Integration
 
 
