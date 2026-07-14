@@ -79,10 +79,12 @@ def login():
                 else:
                     #Insert a main.py definition here
                     pass
+                break
 
         else:
             print('Enter a valid option!')
             continue
+        break
 
 def admin_login():
     while True:
@@ -97,6 +99,7 @@ def admin_login():
             else:
                 print('The admin ID or the password is invalid')
                 continue
+        break
 
 def acc_creation():
     while True:
@@ -119,13 +122,17 @@ def acc_creation():
             user_name = input('Enter your name: ')
             try:
                 user_mobile = int(input('Enter your mobile number: '))
-                temp_str = str(user_mobile)
-                if len(temp_str) != 10:
+                if len(str(user_mobile)) != 10:
                     print('Enter a valid number!')
                     continue
             except ValueError:
                 print('Enter a valid number!')
                 continue
+            a = 1
+            cursor.execute("""INSERT INTO user_details(user_id, user_name, user_mobile) VALUES(%s, %s, %s)""", (user_id, user_name, str(user_mobile)))
+            conn.commit()
             break
-        cursor.execute("""INSERT INTO user_details(user_id, user_name, user_mobile) VALUES(%s, %s, %s)""", (user_id, user_name, user_mobile))
-        conn.commit()
+        break
+            
+# Testing
+welcome()
