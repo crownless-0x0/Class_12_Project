@@ -1,11 +1,14 @@
 import time
-import csv_to_sql_importer
+#import csv_to_sql_importer
 import mysql.connector as ms
-import fund_transfer as fd
-import monte_carlo as mc
+#import fund_transfer as fd
+#import monte_carlo as mc
 #import output_handling as oh
+import tabulate as tb
+import csv
 
 x = ms.connect(host='localhost', user='root', passwd='root', database='esanth_shivesh_project')
+cur = x.cursor()
 
 
 def home_page(query_result):
@@ -30,14 +33,16 @@ def home_page(query_result):
     elif query == 2:
       stock_prediction(query_result)
     elif query == 3:
-      fd.send_funds(query_result)
+      #fd.send_funds(query_result)
+      pass
     elif query == 4:
-      csv_to_sql_importer.input_csv()
+      #csv_to_sql_importer.input_csv()
+      pass
     elif query == 5:
       export_portfolio(query_result)
     elif query == 6:
       print('Exiting to login...')
-      login_page.welcome()
+      #login_page.welcome()
     else:
       print('Invalid choice. Try again.')
 
@@ -56,14 +61,16 @@ def stock_prediction(query_result):
     opt = input('Enter your choice: ')
 
     if opt == '1':
-      out = mc.monte_carlo_simple(stock)
+      #out = mc.monte_carlo_simple(stock)
+      pass
     elif opt == '2':
-      out = mc.monte_carlo_log(stock)
+     # out = mc.monte_carlo_log(stock)
+     pass
     else:
       print('Invalid choice')
       continue
 
-    oh.output(out, stock)
+    #oh.output(out, stock)
 
     cont = input('Do you want to try another stock?: y/n    ').lower()
     if cont != 'y':
@@ -72,8 +79,6 @@ def stock_prediction(query_result):
 
 def portfolio(query_result):
   user_id = query_result[0]
-  x = ms.connect(host='localhost', user='root', passwd='root', database='esanth_shivesh_project')
-  cur = x.cursor()
   cur.execute('SELECT * FROM user_port WHERE user_id = %s', (user_id,))
   result = cur.fetchone()
 
@@ -99,17 +104,34 @@ def portfolio(query_result):
 
 
 def export_portfolio(query_result):
+  user_id = query_result[0]
+  cur.execute('SELECT * FROM user_port WHERE user_id = %s',(query_result[0]))
+  user_port = cur.fetchone()
   print('='*80)
   print('Export your portfolio'.center(59))
   print('='*80)
   while True:
     type = input('Which format do you want? .txt or .csv (1/2): ')
     if type not in ['1','2']:
-        print('Enter a valid option: ')
-        continue
+      print('Enter a valid option: ')
+      continue
     elif type == '1':
-        print('Exporting your details as a .txt file', end = '')
-        for i in range(8):
-            print('.', end = '')
-            time.sleep(0.2)
-            
+      print('Exporting your details as a .txt file', end = '')
+      for i in range(8):
+        print('.', end = '')
+        time.sleep(0.2)
+      with open(f'{user_id}_portfolio.txt', 'w') as f:
+        f.write('PRISM Portfolio\n')
+        data = [[query_result[0], user_port[1], user_port[2], user_port[3], user_port[4]]]
+        headers = ['UserID','Total Amount Spent','Stocks Owned','Last Trade','Profit/Loss']
+        f.write(tb.tabulate(data, headers=headers, tablefmt='grid'))
+    elif type == '2':
+      print('Exporting your portfolio as a .csv file', end = '')
+      for i in range(8):
+        print('.', end = '')
+        time.sleep(0.2)
+      with open(f'{user_id}_portfolio.csv', 'w') as f:
+        writer =  csv.writer(f)
+        writer.writerow(['Name','Total Amount Spent','Stocks owned','Last Trade','Profit/Loss'])
+        writer.writerow([query_result[0], user_port[1], user_port[2], user_port[3], user_port[4]])
+      
