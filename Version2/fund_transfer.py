@@ -23,4 +23,39 @@ def send_funds(query_result):
             tries -= 1
             continue
         else:
-            cur.execute('SELECT  ')
+            cur.execute('SELECT * FROM accounts WHERE user_id = %s',(query_result[0],))
+            data = cur.fetchone()
+            if data is None:
+                print('You have\'nt affiliated your account with this PRISM account. Please add an account to continue')
+                user_in = input('Do you want to link your account?(y/n) : ')
+                if user_in.lower() == 'y' or '':
+                    datain = []
+                    while True:
+                        acc_no = input('Enter your acount number: ')
+                        if len(acc_no) != 15:
+                            print('Enter a valid account number (p.s. its a 15 char string)')
+                            continue
+                        else:
+                            datain.append(acc_no)
+                            break
+                    balance = int(input('Enter the balance in you account:  '))
+                    datain.append(balance)
+                cur.execute('INSERT INTO accounts VALUES(%s,%s,%s)',tuple(datain))
+                x.commit()
+                continue
+            else:
+                print(f'You\'re transferring from {data[0]}')
+                print(f'Balance: {data[2]}')
+                print()
+                cont = input('Do  you want to continue: ').lower()
+                if cont == 'y' or '':
+                    datain = []
+                    while True:
+                        acc_no = input('Enter your recipient account number: ')
+                        if len(acc_no) != 15:
+                            print('Enter a valid account number (p.s. its a 15 char string)')
+                            continue
+                        else:
+                            datain.append(acc_no)
+                            break
+                    
