@@ -8,7 +8,7 @@ def get_connected():
         host="localhost",
         user='root',
         passwd='root',
-        database='esanth_shivesh_project'
+        database='PRISM'
     )
 
 conn = get_connected()
@@ -178,7 +178,7 @@ def acc_creation():
                     sq2 = input('Whats your favourite movie?: ')
                     sq3 = input('Whats your dream job?: ')
                     print('='*80)
-                    cursor.execute("INSERT INTO login_creds(user_id, password, sques1, sques2, sques3) VALUES(%s, %s, %s, %s, %s)", (user_id, password, sq1, sq2, sq3))
+                    cursor.execute("INSERT INTO login_creds(user_id, passwd, sques1, sques2, sques3) VALUES(%s, %s, %s, %s, %s)", (user_id, password, sq1, sq2, sq3))
                     conn.commit()
                     break
             except ValueError:

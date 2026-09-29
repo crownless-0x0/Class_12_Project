@@ -7,7 +7,7 @@ import mysql.connector as ms
 import tabulate as tb
 import csv
 
-x = ms.connect(host='localhost', user='root', passwd='root', database='esanth_shivesh_project')
+x = ms.connect(host='localhost', user='root', passwd='root', database='PRISM')
 cur = x.cursor()
 
 
