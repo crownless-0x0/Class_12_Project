@@ -62,6 +62,7 @@ def welcome():
 
 def login():
     a = 0
+    query_result = None
     while True:
         if a >= 2:
             ques = input('Try resetting the password? y/n (Default = n): ')
@@ -111,6 +112,7 @@ def login():
                 print()
                 break
             main.home_page(query_result)
+            welcome()
             return
         else:
             print('Enter a valid option!')
@@ -228,12 +230,15 @@ def passwd_recovery(a):
             print('='*80)
             newpwd = input('New Password: ')
             print('='*80)
-            cursor.execute('UPDATE login_creds set password = %s where user_id = %s',(newpwd,result[0]))
+            cursor.execute('UPDATE login_creds set passwd = %s where user_id = %s',(newpwd,result[0]))
             conn.commit()
+            print('Password updated successfully!')
             break
         else:
             print('='*80)
             print('Security check failed. Please try again')
             print('='*80)
             continue
-welcome()
+
+if __name__ == '__main__':
+    welcome()

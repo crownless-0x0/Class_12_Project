@@ -23,7 +23,7 @@ def output(in1, stock):
     else:
         call = 'SELL'
 
-    data = [[stock,last_close,price,str(inc_per) + '%',str(prob_up) + '%',str(prob_down) + '%',call]]
+    data = [[stock, last_close, round(price, 2), str(round(inc_per, 2)) + '%', str(round(prob_up, 2)) + '%', str(round(prob_down, 2)) + '%', call]]
 
     headers = ['Name','Last Close','Predicted Price','Increase %','Probability Up %','Probability Down %','Call']
     print()
@@ -31,4 +31,11 @@ def output(in1, stock):
     print()
 
 def portflio_out(query_result):
-    
+    print('=' * 80)
+    print('YOUR PORTFOLIO'.center(70))
+    print('=' * 80)
+    data = [[query_result[0], query_result[1], query_result[2], query_result[3], query_result[4]]]
+    headers = ['UserID', 'Total Amount Spent', 'Stocks Owned', 'Last Trade', 'Profit/Loss']
+    print()
+    print(tabulate(data, headers=headers, tablefmt='grid'))
+    print()
